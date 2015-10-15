@@ -159,7 +159,7 @@ And let us assign various priorities to the other todo items.
 
 It is kind of cluttered with the non-prioritized and prioritized items mixed together so let us just display the items that have assigned priorities.
 
-	PS> Format-ToDo $(Get-Todo -PrioritizedOnly $true)
+	PS> Format-ToDo $(Get-Todo -PrioritizedOnly)
 	TODO: 4 tasks in C:\Users\Thomas\Documents\todo.txt
 	--
 	

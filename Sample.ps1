@@ -97,7 +97,7 @@ Format-ToDo $(Get-ToDo)
 #--
 #TODO: 5 tasks in C:/Documents and Settings/gina/My Documents/todo.txt
 
-Format-ToDo $(Get-Todo -PrioritizedOnly $true)
+Format-ToDo $(Get-Todo -PrioritizedOnly)
  
 #03 (A) Seal ship's cracks with biomatter +GalacticaRepairs  <-- yellow
 #02 (A) Upgrade jump drives with Cylon technology +GalacticaRepairs  <-- yellow

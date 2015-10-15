@@ -84,7 +84,7 @@ Describe "Set-ToDo" {
 	
 		Set-Todo -File $file -LineNumber 1 -MarkCompleted
 	
-		$result = Get-ToDo -File $file -IncludeCompleted $true
+		$result = Get-ToDo -File $file -IncludeCompleted
 	
 		It "will have its completed flag set to true" {
 			$result.Completed | Should Be $True
@@ -150,4 +150,62 @@ Describe "Set-ToDo" {
             $result.Priority | Should Be ""
 		}
 	}
+	
+	Context "When you try to complete an already completed item" {
+	    If (Test-Path -Path $file) {
+			Remove-Item -Path $file
+		}
+
+		Add-ToDo -File $file -Text "This is item 1" -Completed -CompletedDate "2014-10-31"
+		Set-ToDo -LineNumber 1 -MarkCompleted
+		
+		$result = Get-ToDo -File $file -IncludeCompleted
+	
+		It "will not be updated if you do not force it" {
+			$result.Text | Should Be "This is item 1"
+            $result.Completed | Should Be $true
+            $result.CompletedDate | Should Be "2014-10-31"
+		}
+		
+		Set-ToDo -File $file -LineNumber 1 -MarkCompleted -Force
+		
+		$result = Get-ToDo -File $file -IncludeCompleted
+	
+		It "will get a new completion date when forced" {
+			$result.Text | Should Be "This is item 1"
+            $result.Completed | Should Be $true
+            $result.CompletedDate | Should Be $("{0:yyyy-MM-dd}" -f (Get-Date))
+		}
+	}
+
+    Context "When you try to prioritize an already completed item" {
+		If (Test-Path -Path $file) {
+			Remove-Item -Path $file
+		}
+
+		Set-Content -Path $file -Value "2014-10-31 This is item 1"
+	
+		Set-ToDo -File $file -LineNumber 1 -Priority "A"
+		Set-ToDo -File $file -LineNumber 1 -MarkCompleted 
+		Set-ToDo -File $file -LineNumber 1 -Priority "B"
+	
+		$result = Get-ToDo -File $file -IncludeCompleted
+	
+		It "will not be updated if you do not force it" {
+			$result.Text | Should Be "This is item 1"
+            $result.Completed | Should Be $true
+			$result.Priority | Should Be "A"
+		}
+		
+		Set-ToDo -File $file -LineNumber 1 -Priority "B" -Force
+	
+		$result = Get-ToDo -File $file -IncludeCompleted
+
+		It "will get a new priority when forced" {
+			$result.Text | Should Be "This is item 1"
+            $result.Completed | Should Be $true
+            $result.Priority | Should Be "B"
+		}
+	}
+
 }

@@ -55,7 +55,7 @@ function Add-ToDo
         [string] $Text,
         
         [Parameter(Mandatory = $false)]
-        [bool] $Completed = $false,
+        [switch] $Completed,
         
         [Parameter(Mandatory = $false)]
         [AllowNull()]

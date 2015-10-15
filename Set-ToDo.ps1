@@ -9,10 +9,15 @@
    The first line of the todo file is considered to be line 1.
    
 .Example
-   Set-ToDo -LineNumber 1 -MarkCompleted $True
+   Set-ToDo -LineNumber 1 -MarkCompleted
    
    Marks the todo item at line 1 completed.
-     
+
+.Example
+   Set-ToDo -LineNumber 1 -MarkCompleted -Force
+   
+   Marks the todo item at line 1 completed, overwriting the existing completion date if it had one already.
+   
 .Example
    Set-ToDo -LineNumber 3 -Priority A
    
@@ -25,7 +30,7 @@
    The number of the line of the todo item you want to update. The first line of the file is 1.
 
 .Parameter MarkCompleted
-   The todo item will be assigned a completion date of today.
+   The todo item will be assigned a completion date of today. If the item is already marked completed then you will need to specify the -Force switch to overwrite the existing date.
 
 .Parameter MarkNotCompleted
    The todo item will be re-opened by clearing its completion date.
@@ -54,7 +59,10 @@ function Set-ToDo
         [Parameter(Mandatory = $false)]
         [AllowNull()]
         [ValidatePattern("[ A-Z!]")]
-        [string] $Priority
+        [string] $Priority,
+		
+		[Parameter(Mandatory = $false)]
+		[switch] $Force
     )
    	    
     begin 
@@ -78,8 +86,15 @@ function Set-ToDo
         {
             if ($MarkCompleted)
             {
-                $ToDo.Completed = $true
-                $ToDo.CompletedDate = $CompletedDate
+				if ($ToDo.Completed -and !$Force)
+				{
+					Write-Host -ForegroundColor Yellow "ToDo is already marked completed, use -Force to change completed date."
+				} 
+				else 
+				{
+					$ToDo.Completed = $true
+					$ToDo.CompletedDate = $CompletedDate
+				}
             }
             
             if ($MarkNotcompleted)
@@ -90,7 +105,14 @@ function Set-ToDo
             
             if ($Priority)
             {
-                $ToDo.Priority = $Priority
+				if ($ToDo.Completed -and !$Force)
+				{
+					Write-Host -ForegroundColor Yellow "ToDo is already marked completed, use -Force to change priority."
+				}
+				else
+				{
+					$ToDo.Priority = $Priority
+				}
             }
 
             #Write-Host -ForegroundColor Green "Updated '$($ToDo.Text)'"

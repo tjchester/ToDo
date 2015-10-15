@@ -111,12 +111,12 @@ Describe "Get-ToDo" {
 		Set-Content -Path $file -Value "x 2014-10-31 This is item 1"
 
         It "will only display them if the include completed flag is true" {
-            $result = Get-ToDo -File $file -IncludeCompleted $true
+            $result = Get-ToDo -File $file -IncludeCompleted
             $result.Text | Should Be "This is item 1"
         }
 
         It "will not display them if the include completed flag is false" {
-            $result = Get-ToDo -File $file -IncludeCompleted $false
+            $result = Get-ToDo -File $file
             $result | Should Be $null
         }
     }
@@ -183,7 +183,7 @@ Describe "Get-ToDo" {
 		Set-Content -Path $file -Value "(A) This is item 1","This is item 2"
 
         It "will only display items that have a priority set" {
-            $result = @(Get-ToDo -File $file -PrioritizedOnly $true)
+            $result = @(Get-ToDo -File $file -PrioritizedOnly)
             $result.Count | Should Be 1
             $result.Text | Should Be "This is item 1"
             $result.Priority | Should Be "A"

@@ -28,8 +28,7 @@
    The absolute or relative path of the todo file you want to remove the item from. If this is not specified, the default file will be C:\Users\UserName\Documents\todo.txt.
 
 .Parameter IncludeCompleted
-   If $True then the output will include completed items in the output as well as open items. This paramater is optional, so not including it is the equivalent of
-   specifying a value of $False.
+   If specified then the output will include completed items in the output as well as open items.
    
 .Parameter SearchText
    The string value to be used to filter the returned set of items based on the todo text property.
@@ -41,8 +40,7 @@
    The value to be used to filter the returned set of items that contain the specified context string.
 
 .Parameter PrioritizedOnly
-   If $True then the output will include only those items that have a priority value set. This parameter is optional, so not including it is the equivalent of
-   specifying a value of $False.
+   If specified then the output will include only those items that have a priority value set.
 
 #>
 #.Example
@@ -57,14 +55,14 @@ function Get-ToDo
         [string] $File=$null,
                
         [Parameter(Mandatory = $false)]
-        [bool] $IncludeCompleted = $false,
+        [switch] $IncludeCompleted,
         
         [Parameter(Mandatory = $false)]
         [AllowNull()]
         [string] $SearchText = $null,
 
         [Parameter(Mandatory = $false)]
-        [bool] $PrioritizedOnly = $false,
+        [switch] $PrioritizedOnly,
 
         [Parameter(Mandatory = $false)]
         [string] $SearchProject = $null,

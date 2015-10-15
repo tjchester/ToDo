@@ -75,9 +75,9 @@ Describe "Add-ToDo" {
 			Remove-Item -Path $file
 		}
 
-		Add-ToDo -File $file -Text "This is item 1" -Completed $true -CompletedDate "2014-10-31"
+		Add-ToDo -File $file -Text "This is item 1" -Completed -CompletedDate "2014-10-31"
 		
-		$result = Get-ToDo -File $file -IncludeCompleted $true
+		$result = Get-ToDo -File $file -IncludeCompleted
 	
 		It "will be saved that completed date" {
 			$result.Text | Should Be "This is item 1"
@@ -85,16 +85,16 @@ Describe "Add-ToDo" {
             $result.CompletedDate | Should Be "2014-10-31"
 		}
 	}
-
+	
     Context "When a completed item is added without a completion date" {
 
         If (Test-Path -Path $file) {
 			Remove-Item -Path $file
 		}
 
-		Add-ToDo -File $file -Text "This is item 1" -Completed $true
+		Add-ToDo -File $file -Text "This is item 1" -Completed
 		
-		$result = Get-ToDo -File $file -IncludeCompleted $true
+		$result = Get-ToDo -File $file -IncludeCompleted
 	
 		It "will be saved with the current date" {
 			$result.Text | Should Be "This is item 1"
